@@ -1,0 +1,284 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <meta charset="UTF-8">
+    <title>Citizen Profile</title>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script>
+
+        // Aadhaar Front Preview
+        function frontPreview(event) {
+            const file = event.target.files[0];
+            if (file) {
+                document.getElementById("frontPrev").src = URL.createObjectURL(file);
+                document.getElementById("frontPrev").style.display = "block";
+            }
+        }
+
+        // Aadhaar Back Preview
+        function backPreview(event) {
+            const file = event.target.files[0];
+            if (file) {
+                document.getElementById("backPrev").src = URL.createObjectURL(file);
+                document.getElementById("backPrev").style.display = "block";
+            }
+        }
+
+        // AJAX Fetch
+        $(document).ready(function () {
+
+            $("#btnFetch").click(function () {
+
+                $.ajax({
+                    url: "/findCitizen",
+                    type: "get",
+                    data: { emailid: $("#emailid").val() }
+                })
+                    .done(function (resp) {
+
+                        if (resp.length == 0) {
+                            alert("No Record Found");
+                            return;
+                        }
+
+                        let data = resp[0];
+
+                        $("[name='mobile']").val(data.mobile);
+                        $("[name='name']").val(data.name);
+                        $("[name='aadharno']").val(data.aadharno);
+                        $("[name='fathers']").val(data.fathers);
+                        $("[name='dob']").val(data.dob);
+                        $("[name='gender']").val(data.gender);
+                        $("[name='address']").val(data.address);
+                        $("[name='city']").val(data.city);
+
+                        // show images if exist
+                        if (data.frontpic) {
+                            $("#frontPrev").attr("src", data.frontpic).show();
+                        }
+
+                        if (data.backpic) {
+                            $("#backPrev").attr("src", data.backpic).show();
+                        }
+
+                    })
+                    .fail(function (err) {
+                        alert(err.responseText);
+                    });
+
+            });
+
+        });
+
+    </script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        h4 {
+            font-weight: 600;
+        }
+
+        .main-box {
+            border: 3px solid black;
+            padding: 25px;
+            margin-top: 40px;
+            background: white;
+        }
+
+        .row-equal {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .left-box,
+        .right-box {
+            border: 3px solid black;
+            padding: 20px;
+            height: 100%;
+        }
+
+        .upload-box {
+            border: 2px solid black;
+            width: 150px;
+            height: 150px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .upload-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .btn-custom {
+            border: 2px solid black;
+            background: #0d6efd;
+            color: white;
+            font-weight: bold;
+        }
+
+        .btn-custom:hover {
+            background: black;
+            color: white;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="main-box">
+
+            <h4 class="text-center mb-4"><b>Citizen Profile</b></h4>
+
+            <form method="post" enctype="multipart/form-data">
+
+                <div class="row row-equal">
+
+                    <!-- LEFT SIDE -->
+
+                    <div class="col-md-4">
+
+                        <div class="left-box text-center">
+
+                            <h5><b>Upload Aadhaar Card</b></h5>
+
+                            <div class="upload-box">
+                                <img id="frontPrev">
+                            </div>
+
+                            <input type="file" name="frontpic" class="form-control mb-3" onchange="frontPreview(event)">
+
+                            <div class="upload-box">
+                                <img id="backPrev">
+                            </div>
+
+                            <input type="file" name="backpic" class="form-control" onchange="backPreview(event)">
+
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT SIDE -->
+
+                    <div class="col-md-8">
+
+                        <div class="right-box">
+
+                            <div class="row mb-3">
+
+                                <div class="col-md-6">
+                                    <label>Email ID</label>
+                                    <input type="email" id="emailid" name="emailid" class="form-control">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label>Mobile Number</label>
+                                    <input type="text" name="mobile" class="form-control">
+                                </div>
+
+                                <div class="col-md-2 d-grid">
+                                    <label>&nbsp;</label>
+                                    <button type="button" id="btnFetch" class="btn btn-custom">Fetch</button>
+                                </div>
+
+                            </div>
+
+                            <div class="row mb-3">
+
+                                <div class="col-md-6">
+                                    <label>Name</label>
+                                    <input type="text" name="name" class="form-control">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label>Aadhaar Card No.</label>
+                                    <input type="text" name="aadharno" class="form-control">
+                                </div>
+
+                            </div>
+
+                            <div class="row mb-3">
+
+                                <div class="col-md-6">
+                                    <label>Father's Name</label>
+                                    <input type="text" name="fathers" class="form-control">
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label>DOB</label>
+                                    <input type="date" name="dob" class="form-control">
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label>Gender</label>
+                                    <select name="gender" class="form-select">
+                                        <option selected disabled>Select</option>
+                                        <option>Male</option>
+                                        <option>Female</option>
+                                        <option>Other</option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+                            <div class="row mb-3">
+
+                                <div class="col-md-8">
+                                    <label>Address</label>
+                                    <input type="text" name="address" class="form-control">
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label>City</label>
+                                    <input type="text" name="city" class="form-control">
+                                </div>
+
+                            </div>
+
+                            <div class="text-center mt-4">
+
+                                <input type="submit" value="Save" class="btn btn-custom px-5" formaction="/saveCitizen">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

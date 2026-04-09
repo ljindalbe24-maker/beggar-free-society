@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beggar Free Society</title>
+
+    <!-- ✅ Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+        }
+
+        /* 🔥 Same size for all images */
+        .carousel-box {
+            width: 0.5;
+            aspect-ratio: 6/ 7;
+            /* 🔥 PERFECT banner ratio */
+
+        }
+
+        .carousel-box img {
+            width: 100%;
+            height: 20%;
+        }
+
+        /* 📱 Mobile */
+        @media (max-width: 768px) {
+            .carousel-box {
+                aspect-ratio: 14/ 9;
+            }
+        }
+    </style>
+    <style>
+        /* 🔥 Image styling */
+        .service-img {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        /* 📱 Mobile */
+        @media (max-width: 768px) {
+            .service-img {
+                height: 150px;
+            }
+        }
+    </style>
+    <style>
+        /* 🔥 Image styling */
+        .dev-img {
+            max-height: 350px;
+            object-fit: cover;
+        }
+
+        /* 📱 Mobile */
+        @media (max-width: 768px) {
+            .dev-img {
+                max-height: 250px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- ✅ Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: beige;">
+        <div class="container-fluid">
+
+            <img src="/uploads/Connected figures in vibrant harmony.png" alt="Logo" width="40" height="30" class="me-2">
+
+            <a class="navbar-brand fw-bold" href="#">Beggar Free Society</a>
+
+            <!-- Hamburger -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Menu -->
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav ms-auto">
+
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="modal" data-bs-target="#signupModal">Register</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="modal" data-bs-target="#loginModal">Admin</a>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- LOGIN MODAL -->
+        <div class="modal fade" id="loginModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Login</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="loginFormAjax">
+                            <input type="email" class="form-control mb-2" placeholder="Email" name="loginname" required>
+
+                            <div class="input-group mb-2">
+                                <input type="password" class="form-control" id="loginPassword" name="loginpass"
+                                    placeholder="Password" required>
+                                <span class="input-group-text" onclick="togglePassword('loginPassword', this)">
+                                    <i class="bi bi-eye"></i>
+                                </span>
+                            </div>
+
+
+
+                            <button type="submit" class="btn btn-primary w-100">Login</button>
+                            <div id="loginMsg" class="text-center mt-2"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SIGNUP MODAL -->
+        <div class="modal fade" id="signupModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Signup</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="signupFormAjax">
+                            <input type="email" class="form-control mb-2" placeholder="Email" name="signupname"
+                                required>
+
+                            <div class="input-group mb-2">
+                                <input type="password" class="form-control" id="signupPassword" name="signuppass"
+                                    placeholder="Password" required>
+                                <span class="input-group-text" onclick="togglePassword('signupPassword', this)">
+                                    <i class="bi bi-eye"></i>
+                                </span>
+                            </div>
+
+                            <select class="form-select mb-3" required name="utype2">
+                                <option value="" selected disabled>Select User Type</option>
+                                <option>Citizen</option>
+                                <option>Volunteer</option>
+                            </select>
+
+                            <button type="submit" class="btn btn-success w-100">Signup</button>
+                            <div id="signupMsg" class="text-center mt-2"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+        <script>
+
+            function togglePassword(fieldId, iconSpan) {
+                let input = document.getElementById(fieldId);
+                let icon = iconSpan.querySelector("i");
+
+                if (input.type === "password") {
+                    input.type = "text";
+                    icon.classList.replace("bi-eye", "bi-eye-slash");
+                } else {
+                    input.type = "password";
+                    icon.classList.replace("bi-eye-slash", "bi-eye");
+                }
+            }
+
+            // AJAX
+            $(document).ready(function () {
+
+                // SIGNUP AJAX
+                $("#signupFormAjax").submit(function (e) {
+                    e.preventDefault();
+
+                    $.ajax({
+                        url: "/submitsignup",
+                        type: "post",
+                        data: {
+                            signupname: $("[name='signupname']").val(),
+                            signuppass: $("[name='signuppass']").val(),
+                            utype2: $("[name='utype2']").val()
+                        }
+                    }).done(function (resp) {
+                        $("#signupMsg").text(resp);
+                    }).fail(function (err) {
+                        $("#signupMsg").text(err.responseText);
+                    });
+                });
+
+                // LOGIN AJAX
+                // LOGIN AJAX (FIXED)
+                $("#loginFormAjax").submit(function (e) {
+                    e.preventDefault(); // 🛑 stop refresh
+
+                    $.ajax({
+                        url: "/submitlogin",
+                        type: "post",
+                        data: {
+                            loginname: $("[name='loginname']").val(),
+                            loginpass: $("[name='loginpass']").val(),
+                        }
+                    })
+                        .done(function (resp) {
+                            console.log("Response:", resp);
+
+                            resp = resp.trim().toLowerCase();
+
+                            if (resp === "admin") {
+                                window.location.href = "/admindash.html";
+                            }
+                            else if (resp === "login successful" || resp === "user") {
+                                window.location.href = "/dash-vol-ngo.html";
+                            }
+                            else if (resp === "citizen") {
+                                window.location.href = "/citizendash.html";
+                            }
+                            else {
+                                $("#loginMsg").text(resp);
+                            }
+                        })
+                        .fail(function (err) {
+                            $("#loginMsg").text(err.responseText);
+                        });
+                });
+            });
+        </script>
+    </nav><br>
+
+    <!-- ✅ Carousel -->
+    <div class="container-fluid px-100">
+
+        <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000"
+            data-bs-pause="false">
+
+            <div class="carousel-inner">
+
+                <div class="carousel-item active">
+                    <img src="/uploads/commutree.png" class="d-block w-100 carousel-img">
+                </div>
+
+                <div class="carousel-item">
+                    <img src="/uploads/commutree5.jpeg" class="d-block w-100 carousel-img">
+                </div>
+
+                <div class="carousel-item">
+                    <img src="/uploads/commutree6.jpeg" class="d-block w-100 carousel-img">
+                </div>
+
+            </div>
+
+            <!-- Controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+
+        </div>
+
+    </div>
+    <div class="container my-5">
+
+        <h2 class="text-center mb-4">Our Services</h2>
+
+        <div class="row g-4">
+
+            <!-- Service 1 -->
+            <div class="col-md-4 col-sm-6">
+                <div class="card h-100 shadow-sm">
+                    <img src="/uploads/commutree1.png" class="card-img-top service-img" alt="">
+                    <div class="card-body">
+                        <h5 class="card-title">Profile Registration Service</h5>
+                        <p class="card-text">
+                            Register individuals with identity details and skills to connect them with job
+                            opportunities.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service 2 -->
+            <div class="col-md-4 col-sm-6">
+                <div class="card h-100 shadow-sm">
+                    <img src="/uploads/commutree3.jpeg" class="card-img-top service-img" alt="">
+                    <div class="card-body">
+                        <h5 class="card-title">Emergency Help Hiring</h5>
+                        <p class="card-text">
+                            Discover skills like farming, labor, and local work to match people with the right jobs.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service 3 -->
+            <div class="col-md-4 col-sm-6">
+                <div class="card h-100 shadow-sm">
+                    <img src="/uploads/commutree2.png" class="card-img-top service-img" alt="">
+                    <div class="card-body">
+                        <h5 class="card-title">From Begging to Earning</h5>
+                        <p class="card-text">
+                            Transform lives by providing employment opportunities and helping individuals earn with
+                            dignity.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="container my-5">
+
+        <h2 class="text-center mb-4 ">Meet the Developer</h2><br>
+
+        <div class="row align-items-center">
+
+            <!-- Image -->
+            <div class="col-md-5 text-center mb-3">
+                <img src="/uploads/1774706662446_vecteezy_portrait-of-caucasian-volunteer-man-enjoy-charitable-social_10324298.jpg"
+                    class="img-fluid rounded shadow dev-img" alt="Developer">
+            </div>
+
+            <!-- Text -->
+            <div class="col-md-7">
+                <h4>Lakshay Jindal</h4>
+                <p>
+                    I am a passionate full-stack developer dedicated to building solutions that create real social
+                    impact.
+                    This platform is designed to connect volunteers and citizens, helping transform lives by turning
+                    begging
+                    into meaningful work opportunities using modern web technologies.
+                </p>
+
+                <p class="text-muted">
+                    Thanks to Mr. Rajesh K. Bansal for his guidance and support.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="container my-5">
+
+        <h2 class="text-center mb-4">Reach Us</h2><br>
+
+        <div class="row">
+
+            <!-- Contact Info + Map -->
+            <div class="col-md-6 mb-4">
+
+                <h5>Contact Information</h5>
+                <p><strong>Email:</strong> support@beggarfree.org</p>
+                <p><strong>Phone:</strong> +91 9876543210</p>
+                <p><strong>Location:</strong> India</p>
+
+                <!-- 🌍 Google Map -->
+                <div class="map-container mt-3">
+                    <iframe src="https://www.google.com/maps?q=India&output=embed" allowfullscreen="" loading="lazy">
+                    </iframe>
+                </div>
+
+            </div>
+
+            <!-- Contact Form -->
+            <div class="col-md-6">
+                <form>
+
+                    <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="Your Name" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <input type="email" class="form-control" placeholder="Your Email" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <textarea class="form-control" rows="4" placeholder="Your Message"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100">
+                        Send Message
+                    </button>
+
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        <p class="mb-0">
+            © 2026 Beggar Free Society. All Rights Reserved.
+        </p>
+    </footer>
+
+
+    <!-- ✅ Bootstrap Bundle JS (IMPORTANT for autoplay) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

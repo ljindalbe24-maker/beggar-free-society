@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Volunteers</title>
+</head>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+
+<script>
+    var module = angular.module("volModule", []);
+
+    module.controller("volController", function ($scope, $http) {
+
+        $scope.jsonAry = [];
+
+        $scope.doFetchVolunteers = function () {
+
+            $http.get("/angular-fetch-volunteers")
+                .then(function (response) {
+                    $scope.jsonAry = response.data;
+                },
+                function () {
+                    alert("Error fetching volunteers");
+                });
+        };
+
+        $scope.doBlock = function (emailid) {
+            $http.get("/angular-user-block?emailid=" + emailid)
+                .then(function (result) {
+                    alert(result.data);
+                    $scope.doFetchVolunteers();
+                });
+        };
+
+        $scope.doResume = function (emailid) {
+            $http.get("/angular-user-resume?emailid=" + emailid)
+                .then(function (result) {
+                    alert(result.data);
+                    $scope.doFetchVolunteers();
+                });
+        };
+
+    });
+</script>
+
+<body ng-app="volModule" ng-controller="volController">
+
+<center>
+
+    <h2>All Volunteers</h2>
+
+    <input type="button" value="Fetch Volunteers" ng-click="doFetchVolunteers()">
+
+    <br><br>
+
+    <table border="1" width="80%">
+        <tr>
+            <th>Sr No</th>
+            <th>Email</th>
+            <th>Password</th>
+            <th>Date of Signup</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+
+        <tr ng-repeat="obj in jsonAry">
+            <td>{{$index+1}}</td>
+            <td>{{obj.emailid}}</td>
+            <td>{{obj.pwd}}</td>
+            <td>{{obj.dos}}</td>
+            <td>
+                <span ng-if="obj.status==1" style="color:green;">Active</span>
+                <span ng-if="obj.status==0" style="color:red;">Blocked</span>
+            </td>
+            <td>
+                <input type="button" value="Block"
+                       ng-if="obj.status==1"
+                       ng-click="doBlock(obj.emailid)">
+
+                <input type="button" value="Resume"
+                       ng-if="obj.status==0"
+                       ng-click="doResume(obj.emailid)">
+            </td>
+        </tr>
+
+    </table>
+
+</center>
+
+</body>
+</html> 

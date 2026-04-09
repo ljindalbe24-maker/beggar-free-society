@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Wealthy Beggar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    .card img {
+      height: 200px;
+      width: 200px;
+      object-fit: cover;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body class="bg-light">
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: beige;">
+    <div class="container-fluid">
+
+      <img src="/uploads/Connected figures in vibrant harmony.png" alt="Logo" width="40" height="30" class="me-2">
+
+      <a class="navbar-brand fw-bold" href="#">Beggar Free Society</a>
+
+      <!-- Hamburger -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Menu -->
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav ms-auto">
+
+
+
+
+
+        </ul>
+      </div>
+
+    </div>
+
+
+  </nav>
+  <br>
+  <!-- Heading -->
+   <div class="container text-center mt-4">
+  <h3>NGO-Volunteer Dashboard</h4>
+</div>
+  <div class="container mt-4">
+  <div class="row justify-content-center">
+
+    <!-- Row 1 (3 cards) -->
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="card text-center shadow-sm">
+        <img src="/uploads/usermanager.png"
+          class="rounded-circle border border-3 border-dark mx-auto"
+          width="120" height="120">
+        <div class="card-body">
+          <a href="profilevol.html" class="btn btn-primary rounded-pill px-4 py-2">
+            Profile
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="card text-center shadow-sm">
+        <img src="/uploads/post-button-click-png.png"
+          class="rounded-circle border border-3 border-dark mx-auto"
+          width="120" height="120">
+        <div class="card-body">
+          <a href="details-beggar.html" class="btn btn-primary rounded-pill px-4 py-2">
+            Post Beggar Details
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="card text-center shadow-sm">
+        <img src="/uploads/vecteezy_3d-businessman-character-in-black-suit-holding-briefcase_56413324.png"
+          class="rounded-circle border border-3 border-dark mx-auto"
+          width="120" height="120">
+        <div class="card-body">
+          <a href="beggarmanagervo.html" class="btn btn-primary rounded-pill px-4 py-2">
+            Beggar Manager
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2 (centered 2 cards) -->
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="card text-center shadow-sm">
+        <img src="/uploads/vecteezy_setting-3d-setting-icon-3d-setting-symbol-3d-setting-image_47248360.png"
+          class="rounded-circle border border-3 border-dark mx-auto"
+          width="120" height="120">
+        <div class="card-body">
+          <button class="btn btn-primary rounded-pill px-4 py-2"
+            data-bs-toggle="modal" data-bs-target="#settingsModal">
+            Settings
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="card text-center shadow-sm">
+        <img src="/uploads/vecteezy_exit-icon-3d_17339087.png"
+          class="rounded-circle border border-3 border-dark mx-auto"
+          width="120" height="120">
+        <div class="card-body">
+          <a href="maindash.html" class="btn btn-primary rounded-pill px-4 py-2">
+            Logout
+          </a>
+        </div>
+      </div>
+    </div>
+
+  
+
+
+  <!-- SETTINGS MODAL -->
+  <div class="modal fade" id="settingsModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title">Reset Password</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+
+          <form>
+
+            <div class="mb-3">
+              <label>Email ID</label>
+              <input type="email" class="form-control" id="email" required>
+            </div>
+
+            <!-- Old Password -->
+            <div class="mb-3">
+              <label>Old Password</label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="oldPass" required>
+                <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('oldPass', this)">
+                  <i class="bi bi-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- New Password -->
+            <div class="mb-3">
+              <label>New Password</label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="newPass" required>
+                <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('newPass', this)">
+                  <i class="bi bi-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary w-100" formaction="/resetpass" onclick="changePassword()">
+              Change Password
+            </button>
+
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function changePassword() {
+
+      var email = document.getElementById("email").value;
+      var oldPass = document.getElementById("oldPass").value;
+      var newPass = document.getElementById("newPass").value;
+
+      console.log("Calling API...");
+
+      fetch(`http://localhost:2003/resetpass?email=${email}&oldPass=${oldPass}&newPass=${newPass}`)
+        .then(res => res.text())
+        .then(data => {
+          console.log("Response:", data);
+          alert(data);
+        })
+        .catch(err => {
+          console.log("Error:", err);
+        });
+    }
+
+    function togglePassword(id, btn) {
+      var input = document.getElementById(id);
+      var icon = btn.querySelector("i");
+
+      if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove("bi-eye");
+        icon.classList.add("bi-eye-slash");
+      } else {
+        input.type = "password";
+        icon.classList.remove("bi-eye-slash");
+        icon.classList.add("bi-eye");
+      }
+    }
+
+
+  </script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

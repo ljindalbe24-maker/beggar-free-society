@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Volunteer Profile</title>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script>
+        // Profile preview
+        function doProfilePrev(event) {
+            const file = event.target.files[0];
+            if (file) {
+                let img = document.getElementById("profilePrev");
+                img.src = URL.createObjectURL(file);
+                img.style.display = "block";
+            }
+        }
+
+        // Aadhar preview
+        function doAadharPrev(event) {
+            const file = event.target.files[0];
+            if (file) {
+                let img = document.getElementById("aadharPrev");
+                img.src = URL.createObjectURL(file);
+                img.style.display = "block";
+            }
+        }
+
+        // Show/Hide GSTIN
+        function toggleGSTIN(selectElement) {
+
+            var gstinRow = document.getElementById("gstinRow");
+            var gstinInput = document.getElementById("gstin");
+
+            if (selectElement.value === "NGO") {
+                gstinRow.style.display = "block";
+                gstinInput.required = true;
+            } else {
+                gstinRow.style.display = "none";
+                gstinInput.required = false;
+                gstinInput.value = "";
+            }
+        }
+
+        // AJAX Fetch
+        $(document).ready(function () {
+
+            $("#btnFetch").click(function () {
+
+                $.ajax({
+                    url: "/findone",
+                    type: "get",
+                    data: { emailid: $("#emailid").val() }
+                })
+                .done(function (respJsonAry) {
+
+                    if (respJsonAry.length === 0) {
+                        alert("No record found");
+                        return;
+                    }
+
+                    let data = respJsonAry[0];
+
+                    // Fill fields
+                    $("[name='name']").val(data.name);
+                    $("[name='contact']").val(data.contact);
+                    $("[name='address']").val(data.address);
+                    $("[name='city']").val(data.city);
+                    $("[name='gender']").val(data.gender);
+                    $("[name='occupation']").val(data.occupation);
+
+                    // Volunteer type
+                    $("#combomode").val(data.combomode);
+
+                    // GSTIN
+                    $("#gstin").val(data.gstin);
+
+                    if (data.combomode === "NGO") {
+                        document.getElementById("gstinRow").style.display = "block";
+                    } else {
+                        document.getElementById("gstinRow").style.display = "none";
+                    }
+
+                    // Images
+                    $("#oldpicurl").val(data.picurl);
+                    $("#oldaadharpicurl").val(data.aadharpicurl);
+
+                    if (data.picurl) {
+                        $("#profilePrev").attr("src", data.picurl).show();
+                    }
+
+                    if (data.aadharpicurl) {
+                        $("#aadharPrev").attr("src", data.aadharpicurl).show();
+                    }
+
+                })
+                .fail(function (err) {
+                    alert(err.responseText);
+                });
+
+            });
+
+        });
+    </script>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .form-box {
+            border: 3px solid black;
+            padding: 30px;
+            margin-top: 40px;
+            background: white;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input, textarea, select {
+            border: 2px solid black !important;
+            background-color: white !important;
+        }
+
+        .btn-custom {
+            border: 2px solid black;
+            background-color: #0d6efd !important;
+            color: white;
+            font-weight: bold;
+            padding: 6px 30px;
+        }
+
+        .btn-custom:hover {
+            background-color: black !important;
+            color: white;
+        }
+
+        img {
+            border: 2px solid black;
+            margin-top: 10px;
+            display: none;   /* 👈 hidden initially */
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="form-box">
+
+        <h4 class="text-center mb-4">Volunteer Profile</h4>
+
+        <form method="post" enctype="multipart/form-data">
+
+            <!-- Hidden fields -->
+            <input type="hidden" name="oldpicurl" id="oldpicurl">
+            <input type="hidden" name="oldaadharpicurl" id="oldaadharpicurl">
+
+            <!-- Email + Type + Fetch -->
+            <div class="row mb-3 align-items-end">
+
+                <div class="col-md-4">
+                    <label>Email ID</label>
+                    <input type="email" id="emailid" name="emailid" class="form-control" required>
+                </div>
+
+                <div class="col-md-4">
+                    <label>Type of Volunteer</label>
+                    <select name="combomode"
+                            id="combomode"
+                            class="form-select"
+                            onchange="toggleGSTIN(this)"
+                            required>
+
+                        <option value="" selected disabled>Select</option>
+                        <option value="NGO">NGO</option>
+                        <option value="Individual">Individual</option>
+
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <input type="button" value="Fetch" id="btnFetch" class="btn btn-custom w-100">
+                </div>
+
+            </div>
+
+            <!-- GSTIN -->
+            <div class="row mb-3" id="gstinRow" style="display:none;">
+                <div class="col-md-6">
+                    <label>NGO GSTIN Number</label>
+                    <input type="text" name="gstin" id="gstin" class="form-control">
+                </div>
+            </div>
+
+            <!-- Name + Contact -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label>Name</label>
+                    <input type="text" name="name" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label>Contact No.</label>
+                    <input type="text" name="contact" class="form-control">
+                </div>
+            </div>
+
+            <!-- Address + City -->
+            <div class="row mb-3">
+                <div class="col-md-8">
+                    <label>Address</label>
+                    <input type="text" name="address" class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <label>City</label>
+                    <input type="text" name="city" class="form-control">
+                </div>
+            </div>
+
+            <!-- Gender + Occupation -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label>Gender</label>
+                    <select name="gender" class="form-select">
+                        <option selected disabled>Select Gender</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label>Occupation</label>
+                    <input type="text" name="occupation" class="form-control">
+                </div>
+            </div>
+
+            <!-- Aadhar + Profile -->
+            <div class="row mb-3">
+                <div class="col-md-6 text-center">
+                    <label>Aadhar Card Photo</label>
+                    <input type="file" class="form-control" name="aadharpic" onchange="doAadharPrev(event)">
+                    <Center><img id="aadharPrev" width="120" height="120"></Center>
+                </div>
+
+                <div class="col-md-6 text-center">
+                    <label>Profile Pic</label>
+                    <input type="file" class="form-control" name="profilephoto" onchange="doProfilePrev(event)">
+                    <center><img id="profilePrev" width="120" height="120"></Center>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="text-center mt-4">
+                <input type="submit" value="Submit" class="btn btn-custom" formaction="/savenow">
+                <input type="submit" value="Update" class="btn btn-custom ms-3" formaction="/doupdate">
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+</body>
+</html>`

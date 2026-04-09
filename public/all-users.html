@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Fetch All Users</title>
+</head>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+
+<script>
+    var module = angular.module("kuchModule", []);
+
+    module.controller("kuchController", function ($scope, $http) {
+
+        $scope.jsonAry = [];
+
+        $scope.doFetchAll = function () {
+
+            $http.get("/angular-fetchall")
+                .then(function (response) {
+                    $scope.jsonAry = response.data;
+                },
+                    function (error) {
+                        alert("Error fetching data");
+                    });
+
+        };
+        $scope.doBlock = function (emailid) {
+            $http.get("/angular-user-block?emailid=" + emailid)
+                .then(allGoodFx, errFx);
+
+            function allGoodFx(result) {
+                alert(result.data);
+                $scope.doFetchAll();   // refresh table
+            }
+
+            function errFx(err) {
+                alert(err.data);
+            }
+        }
+        $scope.doResume = function (emailid) {
+            $http.get("/angular-user-resume?emailid=" + emailid)
+                .then(allGoodFx, errFx);
+
+            function allGoodFx(result) {
+                alert(result.data);
+                $scope.doFetchAll();   // refresh table
+            }
+
+            
+            function errFx(err) {
+                alert(err.data);
+            }
+        }
+
+    });
+</script>
+
+<body ng-app="kuchModule" ng-controller="kuchController">
+
+    <center>
+
+        <h2>All Users</h2>
+
+        <input type="button" value="Fetch All Users" ng-click="doFetchAll()">
+
+        <br><br>
+
+        <table border="1" width="70%">
+            <tr>
+                <th>Sr No</th>
+                <th>Email ID</th>
+                <th>Password</th>
+                <th>User Type</th>
+                <th>Date of Signup</th>
+                <th>Status</th>
+            </tr>
+
+            <tr ng-repeat="obj in jsonAry">
+                <td>{{$index + 1}}</td>
+                <td>{{obj.emailid}}</td>
+                <td>{{obj.pwd}}</td>
+                <td>{{obj.utype}}</td>
+                <td>{{obj.dos}}</td>
+                <td>{{obj.status}}</td>
+                <th>
+                    <input type="button" value="Block" ng-click="doBlock(obj.emailid);">
+                    <input type="button" value="Resume" ng-click="doResume(obj.emailid);">
+
+                </th>
+
+            </tr>
+
+
+        </table>
+
+    </center>
+
+</body>
+
+</html>

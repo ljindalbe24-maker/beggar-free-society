@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="kuchModule">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Beggar Manager</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- AngularJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+
+    <script>
+        var module = angular.module("kuchModule", []);
+
+        module.controller("kuchController", function ($scope, $http) {
+
+            $scope.jsonAry = [];
+            $scope.email = "";
+
+            // 🔹 Fetch by Email
+            $scope.fetchByEmail = function () {
+
+                $http.get("http://localhost:2003/fetch-beggars-by-email?email=" + $scope.email)
+                    .then(function (response) {
+                        console.log(response.data);
+                        $scope.jsonAry = response.data;
+                    },
+                    function () {
+                        alert("Error fetching data");
+                    });
+            };
+
+            // 🔹 Block
+            $scope.doBlock = function (id) {
+                $http.get("http://localhost:2003/angular-beggar-block?id=" + id)
+                    .then(function (res) {
+                        alert(res.data);
+                        $scope.fetchByEmail();
+                    });
+            };
+
+            // 🔹 Resume
+            $scope.doResume = function (id) {
+                $http.get("http://localhost:2003/angular-beggar-resume?id=" + id)
+                    .then(function (res) {
+                        alert(res.data);
+                        $scope.fetchByEmail();
+                    });
+            };
+
+            // 🔹 Delete
+            $scope.doDelete = function (id) {
+                $http.get("http://localhost:2003/delete-beggar?id=" + id)
+                    .then(function (res) {
+                        alert(res.data);
+                        $scope.fetchByEmail();
+                    });
+            };
+
+        });
+    </script>
+
+</head>
+
+<body class="bg-light" ng-controller="kuchController">
+
+    <div class="container mt-4 text-center">
+
+        <h2 class="mb-3">Beggar Manager</h2>
+
+        <!-- 🔹 EMAIL INPUT -->
+        <div class="mb-3">
+            <input type="text" class="form-control w-50 mx-auto"
+                   ng-model="email"
+                   placeholder="Enter Volunteer Email">
+        </div>
+
+        <button class="btn btn-primary mb-3" ng-click="fetchByEmail()">
+            Fetch My Beggars
+        </button>
+
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>Sr No</th>
+                    <th>Volunteer ID</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>City</th>
+                    <th>Work Type</th>
+                    <th>Contact</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr ng-repeat="obj in jsonAry">
+
+                    <td>{{$index + 1}}</td>
+                    <td>{{obj.volunteer_id}}</td>
+                    <td>{{obj.bagger_name}}</td>
+                    <td>{{obj.age}}</td>
+                    <td>{{obj.gender}}</td>
+                    <td>{{obj.city}}</td>
+                    <td>{{obj.work_type}}</td>
+                    <td>{{obj.contact_number}}</td>
+
+                    <!-- STATUS -->
+                    <td>
+                        <span class="badge bg-success" ng-if="obj.status==1">Active</span>
+                        <span class="badge bg-danger" ng-if="obj.status==0">Blocked</span>
+                    </td>
+
+                    <!-- ACTION -->
+                    <td>
+                        <button class="btn btn-danger btn-sm"
+                                ng-if="obj.status==1"
+                                ng-click="doBlock(obj.volunteer_id)">
+                            Block
+                        </button>
+
+                        <button class="btn btn-success btn-sm"
+                                ng-if="obj.status==0"
+                                ng-click="doResume(obj.volunteer_id)">
+                            Resume
+                        </button>
+
+                        <button class="btn btn-dark btn-sm"
+                                ng-click="doDelete(obj.volunteer_id)">
+                            Delete
+                        </button>
+                    </td>
+
+                </tr>
+            </tbody>
+
+        </table>
+
+    </div>
+
+</body>
+
+</html>

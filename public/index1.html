@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login & Signup Modals</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body class="bg-light" style="font-family: 'Courier New', Courier, monospace;">
+
+<div class="container text-center mt-5">
+    <!-- Separate buttons -->
+    <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#loginModal">
+        Login
+    </button>
+    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#signupModal">
+        Signup
+    </button>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal fade" id="loginModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Login</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="loginFormAjax">
+                    <input type="email" class="form-control mb-2"
+                           placeholder="Email" name="loginname" required>
+
+                    <div class="input-group mb-2">
+                        <input type="password" class="form-control"
+                               id="loginPassword"
+                               name="loginpass"
+                               placeholder="Password" required>
+                        <span class="input-group-text"
+                              onclick="togglePassword('loginPassword', this)">
+                            <i class="bi bi-eye"></i>
+                        </span>
+                    </div>
+
+                    
+
+                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                    <div id="loginMsg" class="text-center mt-2"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SIGNUP MODAL -->
+<div class="modal fade" id="signupModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Signup</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="signupFormAjax">
+                    <input type="email" class="form-control mb-2"
+                           placeholder="Email" name="signupname" required>
+
+                    <div class="input-group mb-2">
+                        <input type="password" class="form-control"
+                               id="signupPassword"
+                               name="signuppass"
+                               placeholder="Password" required>
+                        <span class="input-group-text"
+                              onclick="togglePassword('signupPassword', this)">
+                            <i class="bi bi-eye"></i>
+                        </span>
+                    </div>
+
+                    <select class="form-select mb-3" required name="utype2">
+                        <option value="" selected disabled>Select User Type</option>
+                        <option>Citizen</option>
+                        <option>Volunteer</option>
+                    </select>
+
+                    <button type="submit" class="btn btn-success w-100">Signup</button>
+                    <div id="signupMsg" class="text-center mt-2"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+// Toggle password visibility
+function togglePassword(fieldId, iconSpan) {
+    let input = document.getElementById(fieldId);
+    let icon = iconSpan.querySelector("i");
+
+    if (input.type === "password") {
+        input.type = "text";
+        icon.classList.replace("bi-eye", "bi-eye-slash");
+    } else {
+        input.type = "password";
+        icon.classList.replace("bi-eye-slash", "bi-eye");
+    }
+}
+
+// AJAX
+$(document).ready(function(){
+
+    // SIGNUP AJAX
+    $("#signupFormAjax").submit(function(e){
+        e.preventDefault();
+
+        $.ajax({
+            url: "/submitsignup",
+            type: "post",
+            data: {
+                signupname: $("[name='signupname']").val(),
+                signuppass: $("[name='signuppass']").val(),
+                utype2: $("[name='utype2']").val()
+            }
+        }).done(function(resp){
+            $("#signupMsg").text(resp);
+        }).fail(function(err){
+            $("#signupMsg").text(err.responseText);
+        });
+    });
+
+    // LOGIN AJAX
+    $("#loginFormAjax").submit(function(e){
+        e.preventDefault();
+
+        $.ajax({
+            url: "/submitlogin",
+            type: "post",
+            data: {
+                loginname: $("[name='loginname']").val(),
+                loginpass: $("[name='loginpass']").val(),
+                
+            }
+        }).done(function(resp){
+            $("#loginMsg").text(resp);
+        }).fail(function(err){
+            $("#loginMsg").text(err.responseText);
+        });
+    });
+
+});
+</script>
+
+</body>
+</html>

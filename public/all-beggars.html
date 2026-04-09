@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="kuchModule">
+
+<head>
+    <meta charset="UTF-8">
+    <title>All Beggars</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- AngularJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+
+    <script>
+        var module = angular.module("kuchModule", []);
+
+        module.controller("kuchController", function ($scope, $http) {
+
+            $scope.jsonAry = [];
+
+            // 🔹 Fetch All Beggars
+            $scope.doFetchAll = function () {
+
+                $http.get("http://localhost:2003/angular-fetchall-beggars")
+                    .then(function (response) {
+                        console.log(response.data); // debug
+                        $scope.jsonAry = response.data;
+                    },
+                    function () {
+                        alert("Error fetching data");
+                    });
+            };
+
+            // 🔹 Block Beggar
+            $scope.doBlock = function (id) {
+                $http.get("http://localhost:2003/angular-beggar-block?id=" + id)
+                    .then(function (res) {
+                        alert(res.data);
+                        $scope.doFetchAll();
+                    });
+            };
+
+            // 🔹 Resume Beggar
+            $scope.doResume = function (id) {
+                $http.get("http://localhost:2003/angular-beggar-resume?id=" + id)
+                    .then(function (res) {
+                        alert(res.data);
+                        $scope.doFetchAll();
+                    });
+            };
+
+        });
+    </script>
+
+</head>
+
+<body class="bg-light" ng-controller="kuchController">
+
+    <div class="container mt-4 text-center">
+
+        <h2 class="mb-3">All Beggars</h2>
+
+        <button class="btn btn-primary mb-3" ng-click="doFetchAll()">
+            Fetch All Beggars
+        </button>
+
+        <table class="table table-bordered table-striped">
+
+            <thead class="table-dark">
+                <tr>
+                    <th>Sr No</th>
+                    <th>Volunteer ID</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>City</th>
+                    <th>Work Type</th>
+                    <th>Contact</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr ng-repeat="obj in jsonAry">
+
+                    <td>{{$index + 1}}</td>
+                    <td>{{obj.volunteer_id}}</td>
+                    <td>{{obj.bagger_name}}</td>
+                    <td>{{obj.age}}</td>
+                    <td>{{obj.gender}}</td>
+                    <td>{{obj.city}}</td>
+                    <td>{{obj.work_type}}</td>
+                    <td>{{obj.contact_number}}</td>
+
+                    <!-- ✅ Status -->
+                    <td>
+                        <span class="badge bg-success" ng-if="obj.status==1">
+                            Active
+                        </span>
+
+                        <span class="badge bg-danger" ng-if="obj.status==0">
+                            Blocked
+                        </span>
+                    </td>
+
+                    <!-- ✅ Action -->
+                    <td>
+                        <button class="btn btn-danger btn-sm"
+                                ng-if="obj.status==1"
+                                ng-click="doBlock(obj.volunteer_id)">
+                            Block
+                        </button>
+
+                        <button class="btn btn-success btn-sm"
+                                ng-if="obj.status==0"
+                                ng-click="doResume(obj.volunteer_id)">
+                            Resume
+                        </button>
+                    </td>
+
+                </tr>
+            </tbody>
+
+        </table>
+
+    </div>
+
+</body>
+
+</html>
